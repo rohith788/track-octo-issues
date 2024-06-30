@@ -1,18 +1,13 @@
-# coronasafe/care
 
-# import sanic
-# import sqlalchemy
-#TO-DO: store token in env file
-#TO-DO: organize code to find the certain bug label
-#TO-DO: store the data
-#TO-DO: schedule tasks
 import github
 import os
 from collections import defaultdict
-# github entity to access repo
-    # find issues by label
-    #
+# TODO - think of cron jobs too if its cheaper
 class Github:
+    # fixme - parametrize reop
+    # fixme - make token private?
+    # TODO - singleton github client
+    # TODO - filter issues based on not stores or newly created
     def __init__(self, repoPath=None):
         token = os.environ['GITHUB_TOKEN']
         github_client = github.Github(token)
@@ -24,10 +19,17 @@ class Github:
     body(str):, state(str): The current state of the issue(e.g., "open", "closed").
     created_at(datetime bject), updated_at(datetime object), closed_at(datetime object or None), assignee(User object or None), milestone(Milestone object or None), labels(list of Label objects):
     '''
-    def getIssues(self, label='good_first_issue'):
+    def getIssues(self):
+        '''
+        :param
+        :return: None
+        '''
         self.issues = self.repo.get_issues(state="open")  # Retrieve open issues
 
     def getLables(self):
+        '''
+        :return: None
+        '''
         self.getIssues()
         issue_data = defaultdict(list)
         for issue in self.issues:
@@ -44,6 +46,20 @@ class Github:
                 issue_data[l].append(issue_info)
         print(issue_data.keys())
 
+class Scheduler:
+    # TODO - install Airflow
+    # TODO - intigrate DAG into this to schedule jobs and call all other class objects in this
+    # TODO - add this a seperate file
+
+    def __int__(self):
+        pass
+
+class Database:
+    # TODO - set up redis
+    # TODO - connect to redis
+    # TODO - functions to save and query
+    def __int__(self):
+        pass
 if __name__=="__main__":
     gitObj = Github()
     # gitObj.getIssues()
