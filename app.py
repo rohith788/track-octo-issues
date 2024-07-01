@@ -1,5 +1,7 @@
 
 import github
+import redis
+
 import os
 from collections import defaultdict
 # TODO - think of cron jobs too if its cheaper
@@ -55,12 +57,23 @@ class Scheduler:
         pass
 
 class Database:
-    # TODO - set up redis
-    # TODO - connect to redis
-    # TODO - functions to save and query
-    def __int__(self):
-        pass
+    # TODO - fix the function to save data accoring to the format I have
+    # TODO - add functions to query the db
+    def __init__(self, host, port):
+        '''
+        :param host:address of the db
+        :param port: post of the db
+        '''
+        self.redis_client = redis.Redis(host=host, port=port)
+
+    def store_issue(self, issue_id, issue_data):
+        key = f"issue_{issue_id}"
+        self.redis_client.set(key, issue_data)
+
+
 if __name__=="__main__":
-    gitObj = Github()
-    # gitObj.getIssues()
-    gitObj.getLables()
+    # gitObj = Github()
+    # # gitObj.getIssues()
+    # gitObj.getLables()
+    redisDB = Database('localhost', '7979')
+    redisDB.store_issue('1234', 'test')
